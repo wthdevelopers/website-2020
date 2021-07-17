@@ -2,18 +2,14 @@
   <section id="faq" title="FAQs">
     <SectionHeader>FAQs</SectionHeader>
     <div class="faq-content">
-      <Accordion
+      <AccordionGroup
         v-for="(item, idx) in faqArr"
         :key="idx"
-        :accordionName="'faq-accordion'"
-        :accordionIdx="idx"
-        :accordionMaxIdx="faqArr.length - 1"
-        :maxHeight="item.height ? item.height : '400'"
-      >
-        <template v-slot:title>{{ item.title }}</template>
-        <Para v-if="item.type === 'text'" style="margin: 30px 0 20px 0;">{{ item.content }}</Para>
-        <Location v-if="item.type === 'location'" />
-      </Accordion>
+        :title="item.title"
+        :defaultOpenId="currentOpenId"
+        :content="item.content"
+        :onClick="accordionGroupOnClickHandler"
+      />
     </div>
     <svg id="solarscape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3093.3 1268.9">
       <g class="base">
@@ -212,123 +208,29 @@
 
 <script>
 import SectionHeader from '@/components/SectionHeader.vue';
-import Para from '@/components/Para.vue';
-import Accordion from '@/components/Accordion.vue';
-import Location from '@/components/Location.vue';
+import AccordionGroup from '@/components/AccordionGroup';
+import { faqData } from '@/sections/faq/faqData';
 
 export default {
   name: 'faq',
   components: {
+    AccordionGroup,
     SectionHeader,
-    Para,
-    Accordion,
-    Location,
   },
   data: function() {
     return {
-      faqArr: [
-        {
-          title: 'Who is eligible to participate?',
-          type: 'text',
-          content: `You need to be at least 13 years of age at the time of the event to be eligible to participate.
-          If you are over 13 but under 18 years of age, you will be eligible to participate only if you have parental consent (please print out the consent and indemnity form for your parent’s signature and bring it on the day of the hackathon).
-          If you are 18 and older, you would need to present a printed and signed indemnity form upon registration.
-          The respective forms will be emailed to you upon confirmation of your registration.`,
-          height: '450',
-        },
-        {
-          title: 'Is this hackathon free?',
-          type: 'text',
-          content: `Yes, this hackathon is completely free. Come down and have fun,
-          you never know what your ideas might turn into!`,
-        },
-        {
-          title: 'Where is the hackathon held and how can I get there?',
-          type: 'location',
-          content: ``,
-          height: '1050',
-        },
-        {
-          title: 'Can I participate as an individual?',
-          type: 'text',
-          content: `Sure! You can sign up and participate solely as an individual, or if
-          you would like to, you could sign up as an individual and request for a group
-          during registration and we will help you find a group!`,
-        },
-        {
-          title: 'Are the themes open to interpretation?',
-          type: 'text',
-          content: `Yes, you can decide how you want to define your problem statement.
-          If you are unsure of any ideas, you may approach the organizers for
-          clarification at the hackathon!`,
-        },
-        {
-          title: 'Can I start ideating before the competition?',
-          type: 'text',
-          content: `Yes, you can begin conceptualizing your ideas or planning your
-          approach to the themes before the competition. However, only work done on the
-          prototype during the competition itself will be judged.`,
-        },
-        {
-          title: 'What should I bring to the event?',
-          type: 'text',
-          content: `Please bring your computers.
-          A limited quantity of consumable materials such as cardboard, wood and acrylic will be provided, and standard workshop tools will be available.
-          Prototyping materials such as Arduino Unos, some sensors, etc., will also be available for loan.
-          However, should you expect to use a large amount of materials, do bring your own, or let us know before the event and we might be able to help.`,
-          height: '450',
-        },
-        {
-          title: 'How do we handle Intellectual Property (IP)?',
-          type: 'text',
-          content: `Please refer to the Terms and Conditions of the Competition with regards to IP.`,
-        },
-        {
-          title: 'When is the registration deadline?',
-          type: 'text',
-          content: `We will close registration when we hit the maximum capacity allowable for the hackathon or by 14th September 2359hrs,
-          depending on whichever one is earlier. `,
-        },
-        {
-          title: 'How would I know if my registration is confirmed?',
-          type: 'text',
-          content: `You would receive an email stating that your registration is confirmed along with a copy of the indemnity form for your completion.`,
-        },
-        {
-          title: 'If I have opted to have my team formed for me, how will I meet my team?',
-          type: 'text',
-          content: `Once we have matched participants requesting to be placed in a team with complementing skillsets and similar interests in category and technology, we will e-introduce all of you in an email and subsequent follow-up will be left to you.`,
-        },
-        {
-          title: 'Do I need to have any background in Computer Science/Hacking?',
-          type: 'text',
-          content: `You do not need a background in either, although knowing some basic coding can help a lot.
-          Just come with an open mind to learn and try new things!`,
-        },
-        {
-          title: 'Would we have to stay in the venue for the full duration?',
-          type: 'text',
-          content: `No, you do not have to, but announcements may be made door-to-door within our hacking venue and it is advisable to have your team present.`,
-        },
-        {
-          title: 'Will I get a certificate of participation for taking part?',
-          type: 'text',
-          content: `Apologies, but we currently do not have provisions for this.`,
-        },
-        {
-          title: 'Do I have to use a particular coding language?',
-          type: 'text',
-          content: `You are free to use any programming language you desire or need to use based on your prototype.
-          There are no restrictions or requirements as to using specific programming languages.`,
-        },
-        {
-          title: "My question can't be found in the the FAQs!",
-          type: 'text',
-          content: `For any further queries or clarifications, either drop us a message via the contact
-          form below or feel free to email us at whatthehack@sutd.edu.sg.`,
-        },
-      ],
+      faqArr: faqData,
+      currentOpenId: undefined,
     };
+  },
+  methods: {
+    accordionGroupOnClickHandler(id) {
+      if (id === this.currentOpenId) {
+        this.currentOpenId = undefined;
+      } else {
+        this.currentOpenId = id;
+      }
+    },
   },
 };
 </script>
